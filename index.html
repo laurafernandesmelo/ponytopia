@@ -4,32 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Equestria RPG & Map</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* CSS MANTIDO E OTIMIZADO */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0e6ff; display: flex; justify-content: center; padding: 20px; }
-        .container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 500px; text-align: center; }
+        /* --- ESTILOS GERAIS --- */
+        body { font-family: 'Quicksand', sans-serif; background: radial-gradient(circle, #fbc2eb 0%, #a6c1ee 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; }
+        .container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 500px; text-align: center; position: relative; }
         .input-group { margin-bottom: 15px; text-align: left; }
-        input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        button { background: #800080; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; transition: 0.3s; margin-top: 10px; }
+        input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: 'Quicksand', sans-serif; }
+        
+        button { background: #800080; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; transition: 0.3s; margin-top: 10px; font-family: 'Quicksand', sans-serif; }
         button:hover { background: #600060; }
+        .btn-visitante { background: #6c757d; }
+
         .avatar { width: 80px; height: 80px; border-radius: 50%; cursor: pointer; border: 4px solid transparent; transition: 0.3s; object-fit: cover; }
         .avatar.selected { border-color: #800080; transform: scale(1.1); box-shadow: 0 0 10px rgba(128,0,128,0.5); }
         .poney-list { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin: 20px 0; justify-items: center; }
         .link { color: #800080; cursor: pointer; margin-top: 15px; text-decoration: underline; font-size: 14px; }
-        .mapa-wrapper { position: relative; width: 100%; overflow: hidden; border-radius: 10px; }
+        
+        /* Mapa e App */
+        .mapa-wrapper { position: relative; width: 100%; overflow: hidden; border-radius: 10px; margin-top: 15px; }
         .mapa-img { width: 100%; display: block; }
         .ponto { position: absolute; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white; cursor: pointer; }
         .desbloqueado { background: #28a745; }
-        .bloqueado { background: #dc3545; }
-        .avatar-grande { width: 120px; height: 120px; border-radius: 50%; margin: 20px auto; display: block; border: 4px solid #800080; }
+        .avatar-grande { width: 120px; height: 120px; border-radius: 50%; margin: 20px auto; display: block; border: 4px solid #800080; object-fit: cover; }
         .tabs { display: flex; gap: 5px; margin-bottom: 20px; }
         .tabs button { flex: 1; padding: 10px; font-size: 12px; }
-        .logout-btn { background: #dc3545; }
-        .card { padding: 10px; border-radius: 5px; color: white; font-weight: bold; text-transform: uppercase; margin: 5px; }
-        .comum { background: #aaa; }
-        .rara { background: #007bff; }
-        .lendaria { background: #ffc107; color: #000; }
-        #lista-cartas { display: grid; grid-template-columns: 1fr 1fr; margin-top: 20px; }
+        #main-app { width: 100%; max-width: 600px; display: none; }
+
+        /* --- CARTA MÁGICA --- */
+        #portal-carta { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center; }
+        :root { --mlp-purple: #b79ced; --mlp-dark-purple: #6a1b9a; --mlp-gold: #ffd700; --magic-fire: #d500f9; }
+        .envelope-container { position: relative; width: 400px; height: 280px; }
+        .envelope-wrapper { position: relative; width: 100%; height: 100%; background-color: var(--mlp-purple); border-radius: 0 0 20px 20px; z-index: 1; }
+        .envelope-front { position: absolute; bottom: 0; width: 0; height: 0; border-right: 200px solid #9575cd; border-bottom: 140px solid #9575cd; border-left: 200px solid #9575cd; border-top: 140px solid transparent; z-index: 3; border-radius: 0 0 20px 20px; pointer-events: none; }
+        .flap { position: absolute; top: 0; width: 0; height: 0; border-left: 200px solid transparent; border-right: 200px solid transparent; border-top: 150px solid var(--mlp-dark-purple); transform-origin: top; transition: transform 0.6s ease; z-index: 4; pointer-events: none; }
+        .letter { position: absolute; bottom: 10px; left: 5%; width: 90%; height: 100%; background: #ffffff; z-index: 2; transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding: 25px; box-sizing: border-box; border: 5px solid var(--mlp-gold); border-radius: 15px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
+        
+        .envelope-container:hover .flap { transform: rotateX(180deg); z-index: 1; }
+        .envelope-container:hover .letter { transform: translateY(-200px); z-index: 5; }
+        
+        .btn-sim { background-color: #ff85a1; color: white; border-radius: 30px; font-size: 18px; width: 120px; margin: 0 auto; }
+        #btn-nao { background-color: #e0e0e0; color: #666; border-radius: 30px; width: 100px; font-size: 14px; position: relative; }
+        
+        .burn-effect { animation: spikeFire 1.5s forwards !important; border: none !important; pointer-events: none; }
+        @keyframes spikeFire {
+            0% { transform: translateY(-200px) scale(1); background: white; }
+            20% { background: var(--magic-fire); box-shadow: 0 0 50px var(--magic-fire); }
+            100% { transform: translateY(-700px) scale(0); opacity: 0; filter: blur(20px); }
+        }
     </style>
 </head>
 <body>
@@ -65,7 +87,6 @@
 
     <div class="container" id="selecao-poney" style="display:none;">
         <h1>Escolha seu Pônei</h1>
-        <p>Este será seu avatar oficial em Equestria</p>
         <div class="poney-list">
             <img src="https://media.wired.com/photos/59337ed17965e75f5f3c8503/3:2/w_2560%2Cc_limit/MLP-Twilight.jpg" class="avatar" onclick="selecionarPoney(this,'Twilight')" alt="Twilight">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcko1WFEG5FIPA6grJXd1cWJAXiSHAQP0LdzVhOdGJqpi-V0b0it6CxiKlAjuldaNIOs3DutSq5MAlWRPmgMXkgBnC9iWvw8Kga-tLL_Bh&s=10" class="avatar" onclick="selecionarPoney(this,'Fluttershy')" alt="Fluttershy">
@@ -89,152 +110,139 @@
             <input id="loginSenha" type="password" placeholder="Sua senha">
         </div>
         <button onclick="entrar()">Entrar no Jogo</button>
-        <button style="background:#6c757d; margin-top:10px;" onclick="visitante()">Entrar como visitante</button>
+        <button class="btn-visitante" onclick="entrarComoVisitante()">Entrar como visitante</button>
         <p class="link" onclick="mostrarCadastro()">Não tem conta? Criar agora</p>
     </div>
 
-    <div id="main-app" style="display:none; width: 100%; max-width: 600px;">
+    <div id="portal-carta">
+        <div class="envelope-container">
+            <div class="flap"></div>
+            <div class="envelope-front"></div>
+            <div class="letter" id="letter">
+                <div>
+                    <h2 style="font-family: 'Dancing Script';">Caro(a) <span id="user-magic-name">Explorador</span>,</h2>
+                    <p style="font-size: 14px;">Um novo destino aguarda por você em Equestria. Aceita este chamado?</p>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
+                    <button class="btn-sim" onclick="queimarCarta()">SIM!</button>
+                    <button id="btn-nao">NÃO</button>
+                </div>
+            </div>
+            <div class="envelope-wrapper"></div>
+        </div>
+    </div>
+
+    <div id="main-app">
         <nav class="tabs">
-            <button onclick="mudarAba('home')">🏠 Jogo</button>
+            <button onclick="mudarAba('home')">🏠 Personagem</button>
             <button onclick="mudarAba('mapa-aba')">🗺️ Mapa</button>
-            <button class="logout-btn" onclick="logout()">Sair</button>
+            <button style="background:#dc3545;" onclick="location.reload()">Sair</button>
         </nav>
 
         <div class="container aba" id="home">
-            <h1>Meu Pônei</h1>
+            <h1>Perfil</h1>
             <img id="foto-perfil" class="avatar-grande">
-            <p id="info-user"></p>
-            <div class="actions">
-                <button onclick="daily()">🎁 Recompensa Diária</button>
-                <button onclick="missao()" style="margin: 10px 0;">🎮 Missão</button>
-                <button onclick="toggleCartas()">🃏 Minhas Cartas</button>
-            </div>
-            <div id="lista-cartas" style="display:none;"></div>
+            <h2 id="info-user"></h2>
+            <p id="info-genero" style="color: #666; font-style: italic;"></p>
         </div>
 
         <div class="container aba" id="mapa-aba" style="display:none;">
-            <h1>Equestria</h1>
+            <h1>Mapa</h1>
             <div class="mapa-wrapper">
                 <img src="https://static.wikia.nocookie.net/mlp/images/a/a4/Map_of_Equestria_2015.jpg/revision/latest/scale-to-width-down/1000" class="mapa-img">
-                <div class="ponto desbloqueado" style="top:55%; left:45%;" data-nome="Ponyville" data-desc="Cidade principal." onclick="clicarPonto(this)"></div>
-                <div class="ponto desbloqueado" style="top:48%; left:52%;" data-nome="Canterlot" data-desc="Capital de Equestria." onclick="clicarPonto(this)"></div>
+                <div class="ponto desbloqueado" style="top:55%; left:45%;" data-nome="Ponyville" data-desc="Onde a amizade é mágica!" onclick="clicarPonto(this)"></div>
+                <div class="ponto desbloqueado" style="top:48%; left:52%;" data-nome="Canterlot" data-desc="A capital real." onclick="clicarPonto(this)"></div>
             </div>
-            <div class="info-lugar">
-                <h2 id="lugar-nome">Selecione um local</h2>
-                <p id="lugar-desc">Clique nos pontos do mapa.</p>
-            </div>
+            <h3 id="lugar-nome">Selecione um local</h3>
+            <p id="lugar-desc">Clique nos pontos verdes.</p>
         </div>
     </div>
 
     <script>
-        /* --- LÓGICA DE NAVEGAÇÃO --- */
         let poneySelecionado = "";
+        let usuarioSessao = null;
+        const poneyMap = {
+            'Twilight': 'https://media.wired.com/photos/59337ed17965e75f5f3c8503/3:2/w_2560%2Cc_limit/MLP-Twilight.jpg',
+            'Fluttershy': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcko1WFEG5FIPA6grJXd1cWJAXiSHAQP0LdzVhOdGJqpi-V0b0it6CxiKlAjuldaNIOs3DutSq5MAlWRPmgMXkgBnC9iWvw8Kga-tLL_Bh&s=10',
+            'Rainbow': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGk1NmbGDPaUJCLlN4uhOtHeJTsAWeBvh3Eg6_wJ0YIOOnbHjn3vZ4NbVPd8XT1D9i_4l21vlY-Xg4sX_8j5nZ5qZexcBFiDbxyxXq_xZdZQ&s=10',
+            'Rarity': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrX51t_lIv-XJw9lQHe2lkAWGZm6KBkOwrOIpBtnouBpYVWuQsaNGJvRgkhcnROL70xYvyWXk8IYnGdfxp51X6651Mkn2nq1vQg8R3jAWe&s=10',
+            'Applejack': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsKVElxJR57blusabDhZZgE8RK7COxWgPqowcREHKQ9etkKq3qQT2MfTBAOz0BaqwiXMGaVUsYR5XOHF3mAKRrQxPjIOuhl1ixwRp9JGF&s=10',
+            'Pinkie': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLcS6NnetzUhMydMsgoVqH--MRvgEEOdM2pB8zBA2XFxGw68DoST-Honi6jydIv-1jm7eHEaLX_DptXWURHIAJ8tr3z4BCihCgEUMnGMpvoQ&s=10'
+        };
 
-        function irParaSelecaoPoney() {
+        function mostrarLogin() { document.getElementById('cadastro').style.display = 'none'; document.getElementById('login').style.display = 'block'; }
+        function mostrarCadastro() { document.getElementById('cadastro').style.display = 'block'; document.getElementById('login').style.display = 'none'; }
+        
+        function irParaSelecaoPoney() { 
+            if(!document.getElementById('nome').value || !document.getElementById('genero').value) return alert("Preencha todos os campos!");
+            document.getElementById('cadastro').style.display = 'none'; 
+            document.getElementById('selecao-poney').style.display = 'block'; 
+        }
+
+        function selecionarPoney(el, nome) { poneySelecionado = nome; document.querySelectorAll(".avatar").forEach(a => a.classList.remove("selected")); el.classList.add("selected"); }
+
+        function finalizarCadastro() {
+            if(!poneySelecionado) return alert("Escolha um pônei!");
             const nome = document.getElementById('nome').value;
-            const senha = document.getElementById('senha').value;
-            if(!nome || !senha) return alert("Preencha os dados básicos primeiro!");
-            
-            document.getElementById('cadastro').style.display = 'none';
-            document.getElementById('selecao-poney').style.display = 'block';
-        }
-
-        function voltarParaCadastro() {
-            document.getElementById('selecao-poney').style.display = 'none';
-            document.getElementById('cadastro').style.display = 'block';
-        }
-
-        function selecionarPoney(el, nome) {
-            poneySelecionado = nome;
-            document.querySelectorAll(".avatar").forEach(a => a.classList.remove("selected"));
-            el.classList.add("selected");
-        }
-
-        async function finalizarCadastro() {
-            if (!poneySelecionado) return alert("Selecione um pônei para sua foto de perfil!");
-
-            const nome = document.getElementById('nome').value;
-            const senha = document.getElementById('senha').value;
             const genero = document.getElementById('genero').value;
-
-            const novoRegistro = { 
-                nome, 
-                poney: poneySelecionado, 
-                genero,
-                senha: btoa(senha),
-                cartas: [] 
-            };
-
-            // Salva no IndexedDB e LocalStorage
-            await adicionarItem(novoRegistro);
-            localStorage.setItem("user_" + nome, JSON.stringify(novoRegistro));
-
-            alert("Cadastro concluído com sucesso!");
-            location.reload(); // Recarrega para ir ao login
-        }
-
-        /* --- RESTANTE DO CÓDIGO (DB E JOGO) MANTIDOS --- */
-        const DB_NAME = 'EquestriaRPG_DB';
-        const STORE_NAME = 'usuarios_rpg';
-
-        function iniciarDB() {
-            return new Promise((resolve) => {
-                const request = indexedDB.open(DB_NAME, 1);
-                request.onupgradeneeded = (e) => {
-                    const db = e.target.result;
-                    if (!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
-                };
-                request.onsuccess = (e) => resolve(e.target.result);
-            });
-        }
-
-        async function adicionarItem(item) {
-            const db = await iniciarDB();
-            const tx = db.transaction(STORE_NAME, 'readwrite');
-            tx.objectStore(STORE_NAME).add(item);
-        }
-
-        function mostrarLogin() {
-            document.getElementById('cadastro').style.display = 'none';
-            document.getElementById('login').style.display = 'block';
-        }
-
-        function mostrarCadastro() {
-            document.getElementById('cadastro').style.display = 'block';
-            document.getElementById('login').style.display = 'none';
+            const senha = btoa(document.getElementById('senha').value);
+            const user = { nome, poney: poneySelecionado, genero, senha };
+            localStorage.setItem("user_" + nome, JSON.stringify(user));
+            alert("✨ Conta criada com sucesso! Faça login agora.");
+            location.reload();
         }
 
         function entrar() {
             const nome = document.getElementById('loginNome').value;
             const senha = btoa(document.getElementById('loginSenha').value);
             const userJson = localStorage.getItem("user_" + nome);
-            if (!userJson) return alert("Usuário não encontrado!");
-            const user = JSON.parse(userJson);
-            if (user.senha !== senha) return alert("Senha incorreta!");
-            sessionStorage.setItem("usuarioLogado", nome);
-            iniciarApp(user);
+            if (userJson) {
+                const user = JSON.parse(userJson);
+                if (user.senha === senha) { usuarioSessao = user; mostrarCartaMagica(user.nome); return; }
+            }
+            alert("Dados incorretos!");
         }
 
-        function iniciarApp(user) {
-            document.getElementById('login').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
-            document.getElementById('info-user').innerText = `Olá, ${user.nome}!`;
-            
-            // Busca a imagem do pônei baseado no nome salvo
-            const poneyMap = {
-                'Twilight': 'https://media.wired.com/photos/59337ed17965e75f5f3c8503/3:2/w_2560%2Cc_limit/MLP-Twilight.jpg',
-                'Fluttershy': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcko1WFEG5FIPA6grJXd1cWJAXiSHAQP0LdzVhOdGJqpi-V0b0it6CxiKlAjuldaNIOs3DutSq5MAlWRPmgMXkgBnC9iWvw8Kga-tLL_Bh&s=10',
-                'Rainbow': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGk1NmbGDPaUJCLlN4uhOtHeJTsAWeBvh3Eg6_wJ0YIOOnbHjn3vZ4NbVPd8XT1D9i_4l21vlY-Xg4sX_8j5nZ5qZexcBFiDbxyxXq_xZdZQ&s=10',
-                'Rarity': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrX51t_lIv-XJw9lQHe2lkAWGZm6KBkOwrOIpBtnouBpYVWuQsaNGJvRgkhcnROL70xYvyWXk8IYnGdfxp51X6651Mkn2nq1vQg8R3jAWe&s=10',
-                'Applejack': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsKVElxJR57blusabDhZZgE8RK7COxWgPqowcREHKQ9etkKq3qQT2MfTBAOz0BaqwiXMGaVUsYR5XOHF3mAKRrQxPjIOuhl1ixwRp9JGF&s=10',
-                'Pinkie': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLcS6NnetzUhMydMsgoVqH--MRvgEEOdM2pB8zBA2XFxGw68DoST-Honi6jydIv-1jm7eHEaLX_DptXWURHIAJ8tr3z4BCihCgEUMnGMpvoQ&s=10'
-            };
-            document.getElementById('foto-perfil').src = poneyMap[user.poney];
+        function entrarComoVisitante() {
+            usuarioSessao = { nome: "Visitante_" + Math.floor(Math.random()*99), poney: "Twilight", genero: "N/A" };
+            mostrarCartaMagica(usuarioSessao.nome);
         }
+
+        function mostrarCartaMagica(nome) {
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('portal-carta').style.display = 'flex';
+            document.getElementById('user-magic-name').innerText = nome;
+        }
+
+        function queimarCarta() {
+            document.getElementById('letter').classList.add('burn-effect');
+            // Espera a animação acabar (1.5s)
+            setTimeout(() => {
+                alert("✨ O Spike enviou sua resposta para a Princesa Celestia! ✨");
+                
+                document.getElementById('portal-carta').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
+                document.getElementById('info-user').innerText = usuarioSessao.nome;
+                document.getElementById('info-genero').innerText = "Gênero: " + usuarioSessao.genero;
+                document.getElementById('foto-perfil').src = poneyMap[usuarioSessao.poney];
+            }, 1500); 
+        }
+
+        const btnNao = document.getElementById('btn-nao');
+        btnNao.addEventListener('mouseover', function() {
+            this.style.position = 'absolute';
+            this.style.left = Math.random() * 250 + 'px';
+            this.style.top = Math.random() * 150 + 'px';
+        });
 
         function mudarAba(abaId) {
-            document.querySelectorAll('.aba').forEach(aba => aba.style.display = 'none');
+            document.querySelectorAll('.aba').forEach(a => a.style.display = 'none');
             document.getElementById(abaId).style.display = 'block';
+        }
+
+        function clicarPonto(el) {
+            document.getElementById('lugar-nome').innerText = el.dataset.nome;
+            document.getElementById('lugar-desc').innerText = el.dataset.desc;
         }
 
         function formatarData(i) {
@@ -244,11 +252,9 @@
             i.value = v;
         }
 
-        function logout() { location.reload(); }
-        
-        function clicarPonto(el) {
-            document.getElementById('lugar-nome').innerText = el.dataset.nome;
-            document.getElementById('lugar-desc').innerText = el.dataset.desc;
+        function voltarParaCadastro() {
+            document.getElementById('selecao-poney').style.display = 'none';
+            document.getElementById('cadastro').style.display = 'block';
         }
     </script>
 </body>

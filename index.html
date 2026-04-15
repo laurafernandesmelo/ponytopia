@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equestria RPG & Map</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- CONTAINER DE CADASTRO -->
+    <div class="container" id="cadastro">
+        <form id="form-cadastro">
+            <h1>Criar Conta</h1>
+            
+            <div class="input-group">
+                <label>Nome de Usuário</label>
+                <input id="nome" placeholder="Ex: TwilightSparkle" required>
+            </div>
+
+            <div class="input-group">
+                <label>Data de Nascimento</label>
+                <input id="nascimento" placeholder="dd/mm/aaaa" maxlength="10" oninput="formatarData(this)" required>
+            </div>
+
+            <div class="input-group">
+                <label>Gênero</label>
+                <select id="genero" required>
+                    <option value="">Selecione...</option>
+                    <option>Feminino</option>
+                    <option>Masculino</option>
+                    <option>Outro</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Senha</label>
+                <input type="password" id="senha" placeholder="Sua senha secreta" required>
+            </div>
+
+            <h3>Escolha seu pônei inicial:</h3>
+            <div class="poney-list">
+                <img src="https://media.wired.com/photos/59337ed17965e75f5f3c8503/3:2/w_2560%2Cc_limit/MLP-Twilight.jpg" class="avatar" onclick="selecionarPoney(this,'Twilight')" alt="Twilight">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcko1WFEG5FIPA6grJXd1cWJAXiSHAQP0LdzVhOdGJqpi-V0b0it6CxiKlAjuldaNIOs3DutSq5MAlWRPmgMXkgBnC9iWvw8Kga-tLL_Bh&s=10" class="avatar" onclick="selecionarPoney(this,'Fluttershy')" alt="Fluttershy">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGk1NmbGDPaUJCLlN4uhOtHeJTsAWeBvh3Eg6_wJ0YIOOnbHjn3vZ4NbVPd8XT1D9i_4l21vlY-Xg4sX_8j5nZ5qZexcBFiDbxyxXq_xZdZQ&s=10" class="avatar" onclick="selecionarPoney(this,'Rainbow')" alt="Rainbow">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrX51t_lIv-XJw9lQHe2lkAWGZm6KBkOwrOIpBtnouBpYVWuQsaNGJvRgkhcnROL70xYvyWXk8IYnGdfxp51X6651Mkn2nq1vQg8R3jAWe&s=10" class="avatar" onclick="selecionarPoney(this,'Rarity')" alt="Rarity">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsKVElxJR57blusabDhZZgE8RK7COxWgPqowcREHKQ9etkKq3qQT2MfTBAOz0BaqwiXMGaVUsYR5XOHF3mAKRrQxPjIOuhl1ixwRp9JGF&s=10" class="avatar" onclick="selecionarPoney(this,'Applejack')" alt="Applejack">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLcS6NnetzUhMydMsgoVqH--MRvgEEOdM2pB8zBA2XFxGw68DoST-Honi6jydIv-1jm7eHEaLX_DptXWURHIAJ8tr3z4BCihCgEUMnGMpvoQ&s=10" class="avatar" onclick="selecionarPoney(this,'Pinkie')" alt="Pinkie">
+            </div>
+
+            <button type="submit">Cadastrar no Banco</button>
+        </form>
+        
+        <div id="dados-salvos-db"></div>
+
+        <p class="link" onclick="mostrarLogin()">Já tenho conta</p>
+    </div>
+
+    <!-- CONTAINER DE LOGIN -->
+    <div class="container" id="login" style="display:none;">
+        <h1>Bem-vindo!</h1>
+        
+        <div class="input-group">
+            <label>Nome</label>
+            <input id="loginNome" placeholder="Seu nome">
+        </div>
+
+        <div class="input-group">
+            <label>Senha</label>
+            <input id="loginSenha" type="password" placeholder="Sua senha">
+        </div>
+
+        <button onclick="entrar()">Entrar no Jogo</button>
+        <button class="visitante" style="background:#6c757d; margin-top:10px;" onclick="visitante()">Entrar como visitante</button>
+        <p class="link" onclick="mostrarCadastro()">Não tem conta? Criar agora</p>
+    </div>
+
+    <!-- INTERFACE PRINCIPAL (APÓS LOGIN) -->
+    <div id="main-app" style="display:none;">
+        <nav class="tabs">
+            <button onclick="mudarAba('home')">🏠 Jogo</button>
+            <button onclick="mudarAba('mapa-aba')">🗺️ Mapa</button>
+            <button class="logout-btn" onclick="logout()">Sair</button>
+        </nav>
+
+        <!-- ABA HOME -->
+        <div class="container aba" id="home">
+            <h1>Meu Pônei</h1>
+            <img id="foto-perfil" class="avatar-grande">
+            <p id="info-user"></p>
+            <div class="actions">
+                <button onclick="daily()">🎁 Recompensa Diária</button>
+                <button onclick="missao()">🎮 Missão</button>
+                <button onclick="toggleCartas()">🃏 Minhas Cartas</button>
+            </div>
+            <div id="lista-cartas" style="display:none;"></div>
+        </div>
+
+        <!-- ABA MAPA -->
+        <div class="container aba" id="mapa-aba" style="display:none;">
+            <h1>Equestria</h1>
+            <div class="mapa-wrapper">
+                <img src="https://static.wikia.nocookie.net/mlp/images/a/a4/Map_of_Equestria_2015.jpg/revision/latest/scale-to-width-down/1000?cb=20240124202225" class="mapa-img">
+                
+                <div class="ponto desbloqueado" style="top:55%; left:45%;" data-nome="Ponyville" data-desc="Cidade principal onde vivem Twilight e seus amigos." onclick="clicarPonto(this)"></div>
+                <div class="ponto desbloqueado" style="top:48%; left:52%;" data-nome="Canterlot" data-desc="Capital de Equestria, lar da Princesa Celestia." onclick="clicarPonto(this)"></div>
+                <div class="ponto bloqueado" id="ponto-everfree" style="top:58%; left:50%;" data-nome="Everfree Forest" data-desc="Floresta misteriosa e perigosa." onclick="clicarPonto(this)"></div>
+            </div>
+            <div class="info-lugar">
+                <h2 id="lugar-nome">Selecione um local</h2>
+                <p id="lugar-desc">Clique nos pontos do mapa para explorar.</p>
+                <button id="btn-entrar-lugar" style="display:none;" onclick="entrarLugar()">Entrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="db.js"></script>
+    <script src="controller.js"></script>
+</body>
+</html>

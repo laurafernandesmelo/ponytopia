@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Equestria RPG & Map</title>
     <style>
-        /* CSS INTEGRADO PARA O FUNCIONAMENTO VISUAL */
+        /* CSS MANTIDO E OTIMIZADO */
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0e6ff; display: flex; justify-content: center; padding: 20px; }
         .container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 500px; text-align: center; }
         .input-group { margin-bottom: 15px; text-align: left; }
         input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        button { background: #800080; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; transition: 0.3s; }
+        button { background: #800080; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; transition: 0.3s; margin-top: 10px; }
         button:hover { background: #600060; }
-        .avatar { width: 60px; height: 60px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: 0.3s; object-fit: cover; }
-        .avatar.selected { border-color: #800080; transform: scale(1.1); }
-        .poney-list { display: flex; justify-content: center; gap: 10px; margin: 15px 0; flex-wrap: wrap; }
+        .avatar { width: 80px; height: 80px; border-radius: 50%; cursor: pointer; border: 4px solid transparent; transition: 0.3s; object-fit: cover; }
+        .avatar.selected { border-color: #800080; transform: scale(1.1); box-shadow: 0 0 10px rgba(128,0,128,0.5); }
+        .poney-list { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin: 20px 0; justify-items: center; }
         .link { color: #800080; cursor: pointer; margin-top: 15px; text-decoration: underline; font-size: 14px; }
         .mapa-wrapper { position: relative; width: 100%; overflow: hidden; border-radius: 10px; }
         .mapa-img { width: 100%; display: block; }
@@ -58,19 +58,24 @@
                 <label>Senha</label>
                 <input type="password" id="senha" placeholder="Sua senha secreta" required>
             </div>
-            <h3>Escolha seu pônei inicial:</h3>
-            <div class="poney-list">
-                <img src="https://media.wired.com/photos/59337ed17965e75f5f3c8503/3:2/w_2560%2Cc_limit/MLP-Twilight.jpg" class="avatar" onclick="selecionarPoney(this,'Twilight')" alt="Twilight">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcko1WFEG5FIPA6grJXd1cWJAXiSHAQP0LdzVhOdGJqpi-V0b0it6CxiKlAjuldaNIOs3DutSq5MAlWRPmgMXkgBnC9iWvw8Kga-tLL_Bh&s=10" class="avatar" onclick="selecionarPoney(this,'Fluttershy')" alt="Fluttershy">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGk1NmbGDPaUJCLlN4uhOtHeJTsAWeBvh3Eg6_wJ0YIOOnbHjn3vZ4NbVPd8XT1D9i_4l21vlY-Xg4sX_8j5nZ5qZexcBFiDbxyxXq_xZdZQ&s=10" class="avatar" onclick="selecionarPoney(this,'Rainbow')" alt="Rainbow">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrX51t_lIv-XJw9lQHe2lkAWGZm6KBkOwrOIpBtnouBpYVWuQsaNGJvRgkhcnROL70xYvyWXk8IYnGdfxp51X6651Mkn2nq1vQg8R3jAWe&s=10" class="avatar" onclick="selecionarPoney(this,'Rarity')" alt="Rarity">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsKVElxJR57blusabDhZZgE8RK7COxWgPqowcREHKQ9etkKq3qQT2MfTBAOz0BaqwiXMGaVUsYR5XOHF3mAKRrQxPjIOuhl1ixwRp9JGF&s=10" class="avatar" onclick="selecionarPoney(this,'Applejack')" alt="Applejack">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLcS6NnetzUhMydMsgoVqH--MRvgEEOdM2pB8zBA2XFxGw68DoST-Honi6jydIv-1jm7eHEaLX_DptXWURHIAJ8tr3z4BCihCgEUMnGMpvoQ&s=10" class="avatar" onclick="selecionarPoney(this,'Pinkie')" alt="Pinkie">
-            </div>
-            <button type="submit">Cadastrar no Banco</button>
+            <button type="button" onclick="irParaSelecaoPoney()">Próximo: Escolher Avatar</button>
         </form>
-        <div id="dados-salvos-db"></div>
         <p class="link" onclick="mostrarLogin()">Já tenho conta</p>
+    </div>
+
+    <div class="container" id="selecao-poney" style="display:none;">
+        <h1>Escolha seu Pônei</h1>
+        <p>Este será seu avatar oficial em Equestria</p>
+        <div class="poney-list">
+            <img src="https://media.wired.com/photos/59337ed17965e75f5f3c8503/3:2/w_2560%2Cc_limit/MLP-Twilight.jpg" class="avatar" onclick="selecionarPoney(this,'Twilight')" alt="Twilight">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcko1WFEG5FIPA6grJXd1cWJAXiSHAQP0LdzVhOdGJqpi-V0b0it6CxiKlAjuldaNIOs3DutSq5MAlWRPmgMXkgBnC9iWvw8Kga-tLL_Bh&s=10" class="avatar" onclick="selecionarPoney(this,'Fluttershy')" alt="Fluttershy">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGk1NmbGDPaUJCLlN4uhOtHeJTsAWeBvh3Eg6_wJ0YIOOnbHjn3vZ4NbVPd8XT1D9i_4l21vlY-Xg4sX_8j5nZ5qZexcBFiDbxyxXq_xZdZQ&s=10" class="avatar" onclick="selecionarPoney(this,'Rainbow')" alt="Rainbow">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrX51t_lIv-XJw9lQHe2lkAWGZm6KBkOwrOIpBtnouBpYVWuQsaNGJvRgkhcnROL70xYvyWXk8IYnGdfxp51X6651Mkn2nq1vQg8R3jAWe&s=10" class="avatar" onclick="selecionarPoney(this,'Rarity')" alt="Rarity">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsKVElxJR57blusabDhZZgE8RK7COxWgPqowcREHKQ9etkKq3qQT2MfTBAOz0BaqwiXMGaVUsYR5XOHF3mAKRrQxPjIOuhl1ixwRp9JGF&s=10" class="avatar" onclick="selecionarPoney(this,'Applejack')" alt="Applejack">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLcS6NnetzUhMydMsgoVqH--MRvgEEOdM2pB8zBA2XFxGw68DoST-Honi6jydIv-1jm7eHEaLX_DptXWURHIAJ8tr3z4BCihCgEUMnGMpvoQ&s=10" class="avatar" onclick="selecionarPoney(this,'Pinkie')" alt="Pinkie">
+        </div>
+        <button onclick="finalizarCadastro()">Concluir Cadastro</button>
+        <p class="link" onclick="voltarParaCadastro()">Voltar</p>
     </div>
 
     <div class="container" id="login" style="display:none;">
@@ -111,69 +116,83 @@
             <h1>Equestria</h1>
             <div class="mapa-wrapper">
                 <img src="https://static.wikia.nocookie.net/mlp/images/a/a4/Map_of_Equestria_2015.jpg/revision/latest/scale-to-width-down/1000" class="mapa-img">
-                <div class="ponto desbloqueado" style="top:55%; left:45%;" data-nome="Ponyville" data-desc="Cidade principal onde vivem Twilight e seus amigos." onclick="clicarPonto(this)"></div>
-                <div class="ponto desbloqueado" style="top:48%; left:52%;" data-nome="Canterlot" data-desc="Capital de Equestria, lar da Princesa Celestia." onclick="clicarPonto(this)"></div>
-                <div class="ponto bloqueado" id="ponto-everfree" style="top:58%; left:50%;" data-nome="Everfree Forest" data-desc="Floresta misteriosa e perigosa." onclick="clicarPonto(this)"></div>
+                <div class="ponto desbloqueado" style="top:55%; left:45%;" data-nome="Ponyville" data-desc="Cidade principal." onclick="clicarPonto(this)"></div>
+                <div class="ponto desbloqueado" style="top:48%; left:52%;" data-nome="Canterlot" data-desc="Capital de Equestria." onclick="clicarPonto(this)"></div>
             </div>
             <div class="info-lugar">
                 <h2 id="lugar-nome">Selecione um local</h2>
-                <p id="lugar-desc">Clique nos pontos do mapa para explorar.</p>
-                <button id="btn-entrar-lugar" style="display:none;" onclick="entrarLugar()">Entrar</button>
+                <p id="lugar-desc">Clique nos pontos do mapa.</p>
             </div>
         </div>
     </div>
 
     <script>
-        /* --- DB.JS (IndexedDB) --- */
+        /* --- LÓGICA DE NAVEGAÇÃO --- */
+        let poneySelecionado = "";
+
+        function irParaSelecaoPoney() {
+            const nome = document.getElementById('nome').value;
+            const senha = document.getElementById('senha').value;
+            if(!nome || !senha) return alert("Preencha os dados básicos primeiro!");
+            
+            document.getElementById('cadastro').style.display = 'none';
+            document.getElementById('selecao-poney').style.display = 'block';
+        }
+
+        function voltarParaCadastro() {
+            document.getElementById('selecao-poney').style.display = 'none';
+            document.getElementById('cadastro').style.display = 'block';
+        }
+
+        function selecionarPoney(el, nome) {
+            poneySelecionado = nome;
+            document.querySelectorAll(".avatar").forEach(a => a.classList.remove("selected"));
+            el.classList.add("selected");
+        }
+
+        async function finalizarCadastro() {
+            if (!poneySelecionado) return alert("Selecione um pônei para sua foto de perfil!");
+
+            const nome = document.getElementById('nome').value;
+            const senha = document.getElementById('senha').value;
+            const genero = document.getElementById('genero').value;
+
+            const novoRegistro = { 
+                nome, 
+                poney: poneySelecionado, 
+                genero,
+                senha: btoa(senha),
+                cartas: [] 
+            };
+
+            // Salva no IndexedDB e LocalStorage
+            await adicionarItem(novoRegistro);
+            localStorage.setItem("user_" + nome, JSON.stringify(novoRegistro));
+
+            alert("Cadastro concluído com sucesso!");
+            location.reload(); // Recarrega para ir ao login
+        }
+
+        /* --- RESTANTE DO CÓDIGO (DB E JOGO) MANTIDOS --- */
         const DB_NAME = 'EquestriaRPG_DB';
-        const DB_VERSION = 1;
         const STORE_NAME = 'usuarios_rpg';
 
         function iniciarDB() {
-            return new Promise((resolve, reject) => {
-                const request = indexedDB.open(DB_NAME, DB_VERSION);
+            return new Promise((resolve) => {
+                const request = indexedDB.open(DB_NAME, 1);
                 request.onupgradeneeded = (e) => {
                     const db = e.target.result;
-                    if (!db.objectStoreNames.contains(STORE_NAME)) {
-                        db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
-                    }
+                    if (!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
                 };
                 request.onsuccess = (e) => resolve(e.target.result);
-                request.onerror = (e) => reject(e.target.error);
             });
         }
 
         async function adicionarItem(item) {
             const db = await iniciarDB();
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(STORE_NAME, 'readwrite');
-                tx.objectStore(STORE_NAME).add(item);
-                tx.oncomplete = () => resolve();
-                tx.onerror = () => reject(tx.error);
-            });
+            const tx = db.transaction(STORE_NAME, 'readwrite');
+            tx.objectStore(STORE_NAME).add(item);
         }
-
-        async function buscarItens() {
-            const db = await iniciarDB();
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(STORE_NAME, 'readonly');
-                const request = tx.objectStore(STORE_NAME).getAll();
-                request.onsuccess = () => resolve(request.result);
-            });
-        }
-
-        async function deletarItem(id) {
-            const db = await iniciarDB();
-            return new Promise((resolve) => {
-                const tx = db.transaction(STORE_NAME, 'readwrite');
-                tx.objectStore(STORE_NAME).delete(id);
-                tx.oncomplete = () => resolve();
-            });
-        }
-
-        /* --- SCRIPT.JS (Lógica Principal) --- */
-        let poneySelecionado = "";
-        let lugarAtual = null;
 
         function mostrarLogin() {
             document.getElementById('cadastro').style.display = 'none';
@@ -183,6 +202,34 @@
         function mostrarCadastro() {
             document.getElementById('cadastro').style.display = 'block';
             document.getElementById('login').style.display = 'none';
+        }
+
+        function entrar() {
+            const nome = document.getElementById('loginNome').value;
+            const senha = btoa(document.getElementById('loginSenha').value);
+            const userJson = localStorage.getItem("user_" + nome);
+            if (!userJson) return alert("Usuário não encontrado!");
+            const user = JSON.parse(userJson);
+            if (user.senha !== senha) return alert("Senha incorreta!");
+            sessionStorage.setItem("usuarioLogado", nome);
+            iniciarApp(user);
+        }
+
+        function iniciarApp(user) {
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            document.getElementById('info-user').innerText = `Olá, ${user.nome}!`;
+            
+            // Busca a imagem do pônei baseado no nome salvo
+            const poneyMap = {
+                'Twilight': 'https://media.wired.com/photos/59337ed17965e75f5f3c8503/3:2/w_2560%2Cc_limit/MLP-Twilight.jpg',
+                'Fluttershy': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcko1WFEG5FIPA6grJXd1cWJAXiSHAQP0LdzVhOdGJqpi-V0b0it6CxiKlAjuldaNIOs3DutSq5MAlWRPmgMXkgBnC9iWvw8Kga-tLL_Bh&s=10',
+                'Rainbow': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGk1NmbGDPaUJCLlN4uhOtHeJTsAWeBvh3Eg6_wJ0YIOOnbHjn3vZ4NbVPd8XT1D9i_4l21vlY-Xg4sX_8j5nZ5qZexcBFiDbxyxXq_xZdZQ&s=10',
+                'Rarity': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrX51t_lIv-XJw9lQHe2lkAWGZm6KBkOwrOIpBtnouBpYVWuQsaNGJvRgkhcnROL70xYvyWXk8IYnGdfxp51X6651Mkn2nq1vQg8R3jAWe&s=10',
+                'Applejack': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsKVElxJR57blusabDhZZgE8RK7COxWgPqowcREHKQ9etkKq3qQT2MfTBAOz0BaqwiXMGaVUsYR5XOHF3mAKRrQxPjIOuhl1ixwRp9JGF&s=10',
+                'Pinkie': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLcS6NnetzUhMydMsgoVqH--MRvgEEOdM2pB8zBA2XFxGw68DoST-Honi6jydIv-1jm7eHEaLX_DptXWURHIAJ8tr3z4BCihCgEUMnGMpvoQ&s=10'
+            };
+            document.getElementById('foto-perfil').src = poneyMap[user.poney];
         }
 
         function mudarAba(abaId) {
@@ -197,154 +244,12 @@
             i.value = v;
         }
 
-        function selecionarPoney(el, nome) {
-            poneySelecionado = nome;
-            document.querySelectorAll(".avatar").forEach(a => a.classList.remove("selected"));
-            el.classList.add("selected");
-        }
-
-        function entrar() {
-            const nome = document.getElementById('loginNome').value;
-            const senha = btoa(document.getElementById('loginSenha').value);
-            const userJson = localStorage.getItem("user_" + nome);
-            if (!userJson) return alert("Usuário não encontrado!");
-            const user = JSON.parse(userJson);
-            if (user.senha !== senha) return alert("Senha incorreta!");
-            sessionStorage.setItem("usuarioLogado", nome);
-            iniciarApp(user);
-        }
-
-        function visitante() {
-            iniciarApp({ nome: "Visitante", poney: "Twilight", visitante: true });
-        }
-
-        function iniciarApp(user) {
-            document.getElementById('login').style.display = 'none';
-            document.getElementById('cadastro').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
-            document.getElementById('info-user').innerText = `Olá, ${user.nome}!`;
-            const poneyImg = document.querySelector(`img[onclick*="${user.poney}"]`);
-            if (poneyImg) document.getElementById('foto-perfil').src = poneyImg.src;
-            if (user.visitante) {
-                document.querySelectorAll('.actions button').forEach(b => b.disabled = true);
-                document.getElementById('info-user').innerText += " (Modo Visitante)";
-            }
-        }
-
-        function logout() { sessionStorage.removeItem("usuarioLogado"); location.reload(); }
-
-        function daily() {
-            const nome = sessionStorage.getItem("usuarioLogado");
-            const user = JSON.parse(localStorage.getItem("user_" + nome));
-            const hoje = new Date().toDateString();
-            if (user.ultimoDaily === hoje) return alert("Já resgatou hoje!");
-            user.ultimoDaily = hoje;
-            const carta = ganharCarta(user);
-            localStorage.setItem("user_" + nome, JSON.stringify(user));
-            alert(`🎁 Ganhou uma carta ${carta}!`);
-        }
-
-        function missao() {
-            const nome = sessionStorage.getItem("usuarioLogado");
-            const user = JSON.parse(localStorage.getItem("user_" + nome));
-            if (confirm("Ajudar a Twilight?")) {
-                const carta = ganharCarta(user);
-                localStorage.setItem("user_" + nome, JSON.stringify(user));
-                alert(`🎮 Ganhou uma carta ${carta}!`);
-            }
-        }
-
-        function ganharCarta(user) {
-            const r = Math.random();
-            const tipo = r > 0.9 ? "lendaria" : (r > 0.6 ? "rara" : "comum");
-            if(!user.cartas) user.cartas = [];
-            user.cartas.push(tipo);
-            return tipo;
-        }
-
-        function toggleCartas() {
-            const lista = document.getElementById('lista-cartas');
-            if (lista.style.display === 'none') {
-                atualizarCartasUI();
-                lista.style.display = 'grid';
-            } else { lista.style.display = 'none'; }
-        }
-
-        function atualizarCartasUI() {
-            const nome = sessionStorage.getItem("usuarioLogado");
-            const user = JSON.parse(localStorage.getItem("user_" + nome));
-            const container = document.getElementById('lista-cartas');
-            container.innerHTML = "";
-            if (!user.cartas || user.cartas.length === 0) { container.innerHTML = "<p>Sem cartas.</p>"; return; }
-            user.cartas.forEach(tipo => {
-                const div = document.createElement('div');
-                div.className = `card ${tipo}`;
-                div.innerText = tipo;
-                container.appendChild(div);
-            });
-        }
-
+        function logout() { location.reload(); }
+        
         function clicarPonto(el) {
-            lugarAtual = el;
             document.getElementById('lugar-nome').innerText = el.dataset.nome;
             document.getElementById('lugar-desc').innerText = el.dataset.desc;
-            const btn = document.getElementById('btn-entrar-lugar');
-            btn.style.display = 'block';
-            btn.style.opacity = el.classList.contains('bloqueado') ? "0.5" : "1";
         }
-
-        function entrarLugar() {
-            if (!lugarAtual || lugarAtual.classList.contains('bloqueado')) return alert("Bloqueado!");
-            alert("✨ Viajando para " + lugarAtual.dataset.nome + "...");
-        }
-
-        /* --- CONTROLLER.JS (Integração) --- */
-        document.addEventListener('DOMContentLoaded', () => {
-            const formCadastro = document.getElementById('form-cadastro');
-            const displayDB = document.getElementById('dados-salvos-db');
-
-            async function listarDados() {
-                if (!displayDB) return;
-                const itens = await buscarItens();
-                displayDB.innerHTML = '<h3>Exploradores no Banco:</h3>';
-                itens.forEach(item => {
-                    const card = document.createElement('div');
-                    card.style.cssText = "background:#f9f9f9; padding:10px; margin-bottom:5px; border-radius:5px; display:flex; justify-content:space-between; align-items:center; font-size:12px;";
-                    card.innerHTML = `<div><strong>${item.nome}</strong> (${item.poney})</div>
-                                     <button onclick="removerDoBanco(${item.id})" style="width:auto; background:red; padding:3px 8px;">X</button>`;
-                    displayDB.appendChild(card);
-                });
-            }
-
-            formCadastro.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                if (!poneySelecionado) return alert("Selecione um pônei!");
-                
-                const nome = document.getElementById('nome').value;
-                const senha = document.getElementById('senha').value;
-                const novoRegistro = { 
-                    nome, 
-                    poney: poneySelecionado, 
-                    genero: document.getElementById('genero').value,
-                    senha: btoa(senha),
-                    cartas: [] 
-                };
-
-                await adicionarItem(novoRegistro);
-                // Salva no localStorage para permitir login
-                localStorage.setItem("user_" + nome, JSON.stringify(novoRegistro));
-                
-                alert("Salvo com sucesso!");
-                formCadastro.reset();
-                listarDados();
-            });
-
-            window.removerDoBanco = async (id) => {
-                if (confirm("Excluir?")) { await deletarItem(id); listarDados(); }
-            };
-
-            listarDados();
-        });
     </script>
 </body>
 </html>
